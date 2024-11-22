@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Plants</title>
+    <script>
+        function decodeBase64(input) {
+            try {
+                return decodeURIComponent(atob(input).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            } catch (e) {
+                console.error('Failed to decode base64:', e);
+                return input;  // Return the original input if decoding fails
+            }
+        }
+        function encodeBase64(input) {
+            try {
+                return btoa(encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                    return String.fromCharCode('0x' + p1);
+                }));
+            } catch (e) {
+                console.error('Failed to encode base64:', e);
+                return input;  // Return the original input if encoding fails
+            }
+        }
+        async function fetchPlantIds() {
+            const response = await fetch('/database/get?query=select id from plants;');
+            const data = await response.json();
+            const plantSelect = document.getElementById('plantSelect');
+            data.response.data.forEach(plant => {
+                const option = document.createElement('option');
+                plant = plant[0]
+                option.value = plant;
+                option.textContent = plant;
+                plantSelect.appendChild(option);
+            });
+        }
+        
+        async function fetchPlantDetails(plantId) {
+            const response = await fetch(`/plants/get?id=${plantId}`);
+            data = await response.json();
+            const plant = data.response[0]
+            console.log(plant)
+            document.getElementById('IP').textContent = plant.IP;
+            document.getElementById('MAC').textContent = plant.MAC;
+            document.getElementById('port').textContent = plant.port;
+            document.getElementById('location').textContent = decodeBase64(plant.location);
+            document.getElementById('notify_today').textContent = plant.notify_today ? 'Yes' : 'No';
+            document.getElementById('error_flag').textContent = plant.error_flag ? 'Yes' : 'No';
+            document.getElementById('power').textContent = plant.power;
+            document.getElementById('last_measurment').textContent = plant.last_measurment;
+            document.getElementById('next_measurment').textContent = plant.next_measurment;
+            document.getElementById('main_group_id').textContent = plant.main_group_id;
+            document.getElementById('if_home_group_id').textContent = plant.if_home_group_id;
+            document.getElementById('admin_id').textContent = plant.admin_id;
+            document.getElementById('min_measure').textContent = plant.min_measure;
+            document.getElementById('updateButton').style.display = 'block';
+            document.getElementById('plantDetails').style.display = 'block';
+        }
+
+        function enableEditing() {
+            const fields = ['IP', 'MAC', 'port', 'location', 'notify_today', 'error_flag', 'power', 'main_group_id', 'if_home_group_id', 'admin_id', 'min_measure'];
+            fields.forEach(field => {
+                const value = document.getElementById(field).textContent;
+                const input = document.createElement('input');
+                input.id = `${field}_input`;
+                input.value = value;
+                if (field === 'notify_today' || field === 'error_flag') {
+                    input.type = 'checkbox';
+                    input.checked = value === 'Yes';
+                } else if (field === 'last_measurment' || field === 'next_measurment') {
+                    input.type = 'datetime-local';
+                    input.value = value;
+                } else if (field === 'port' || field === 'main_group_id' || field === 'if_home_group_id' || field === 'admin_id' || field === 'min_measure') {
+                    input.type = 'number';
+                } else {
+                    input.type = 'text';
+                }
+                document.getElementById(field).replaceWith(input);
+            });
+            const submitButton = document.createElement('button');
+            submitButton.textContent = 'Submit';
+            submitButton.onclick = updatePlant;
+            document.getElementById('updateButton').replaceWith(submitButton);
+        }
+
+        async function updatePlant() {
+            const plantId = document.getElementById('plantSelect').value;
+            const data = {
+                id: plantId,
+                IP: document.getElementById('IP_input').value,
+                MAC: document.getElementById('MAC_input').value,
+                port: document.getElementById('port_input').value,
+                location: encodeBase64(document.getElementById('location_input').value),
+                notify_today: document.getElementById('notify_today_input').checked ? 1 : 0,
+                error_flag: document.getElementById('error_flag_input').checked ? 1 : 0,
+                power: document.getElementById('power_input').value,
+                // last_measurment: document.getElementById('last_measurment_input').value,
+                // next_measurment: document.getElementById('next_measurment_input').value,
+                main_group_id: document.getElementById('main_group_id_input').value,
+                if_home_group_id: document.getElementById('if_home_group_id_input').value,
+                admin_id: document.getElementById('admin_id_input').value,
+                min_measure: document.getElementById('min_measure_input').value,
+            };
+
+            const response = await fetch('/plants/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            alert(result.response.message);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchPlantIds();
+            document.getElementById('plantSelect').addEventListener('change', function() {
+                const plantId = this.value;
+                if (plantId) {
+                    fetchPlantDetails(plantId);
+                } else {
+                    document.getElementById('plantDetails').style.display = 'none';
+                    document.getElementById('updateButton').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Update Plant Information</h1>
+    <label for="plantSelect">Select Plant:</label>
+    <select id="plantSelect">
+        <option value="">Select a plant</option>
+    </select>
+
+    <div id="plantDetails" style="display:none;">
+        <h2>Plant Details</h2>
+        <div>IP: <span id="IP"></span></div>
+        <div>MAC: <span id="MAC"></span></div>
+        <div>Port: <span id="port"></span></div>
+        <div>Location: <span id="location"></span></div>
+        <div>Notify Today: <span id="notify_today"></span></div>
+        <div>Error Flag: <span id="error_flag"></span></div>
+        <div>Power: <span id="power"></span></div>
+        <div>Last Measurement: <span id="last_measurment"></span></div>
+        <div>Next Measurement: <span id="next_measurment"></span></div>
+        <div>Main Group ID: <span id="main_group_id"></span></div>
+        <div>If Home Group ID: <span id="if_home_group_id"></span></div>
+        <div>Admin ID: <span id="admin_id"></span></div>
+        <div>Min Measure: <span id="min_measure"></span></div>
+        <button id="updateButton" style="display:none;" onclick="enableEditing()">Update Plant</button>
+    </div>
+</body>
+</html>

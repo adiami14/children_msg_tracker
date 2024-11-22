@@ -1,0 +1,28 @@
+# Use Ubuntu as base image
+FROM sergei_image
+
+ENV TZ=Asia/Jerusalem
+
+RUN apt-get update && apt-get install curl -y \
+    net-tools \
+    nano \
+    curl \
+    dnsutils \
+    iputils-ping \
+    iproute2 \
+    python3 \
+    mysql-server \
+    libmysqlclient-dev \
+    python3-pip
+    
+RUN pip install colorama==0.4.6 \
+            mysql-connector-python==8.3.0 \
+            setuptools==68.1.2 \
+            wheel==0.42.0 \
+            pydantic \
+            asyncio \
+            fastapi \
+            requests --break-system-packages
+
+CMD ["/src/web_server/init.sh"]
+# CMD ["/bin/bash"]
