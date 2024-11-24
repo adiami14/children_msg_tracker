@@ -1,5 +1,5 @@
 # Use Ubuntu as base image
-FROM sergei_image
+FROM python:3.9-slim
 
 ENV TZ=Asia/Jerusalem
 
@@ -9,20 +9,9 @@ RUN apt-get update && apt-get install curl -y \
     curl \
     dnsutils \
     iputils-ping \
-    iproute2 \
-    python3 \
-    mysql-server \
-    libmysqlclient-dev \
-    python3-pip
+    iproute2
     
-RUN pip install colorama==0.4.6 \
-            mysql-connector-python==8.3.0 \
-            setuptools==68.1.2 \
-            wheel==0.42.0 \
-            pydantic \
-            asyncio \
-            fastapi \
-            requests --break-system-packages
+    RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
 
 CMD ["/src/web_server/init.sh"]
 # CMD ["/bin/bash"]

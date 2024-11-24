@@ -1,0 +1,13 @@
+database:
+  saved_messages_table_name: "saved_messages"
+  file_path: "./child_msg_tracker"
+  days_to_save_msg: 2
+
+whatsapp:
+  mother_phone: '972234234234'
+  mother_url:   'http://192.168.2.10:3000'
+  child_phone: '972345345345'
+  child_url:    'http://192.168.2.10:5000'
+  notification_group: 'deleted_notifications'
+  
+  
