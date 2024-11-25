@@ -50,7 +50,7 @@ async def check_for_deleted_messages(query_param):
 @app.post("/mother/get_new_command")
 async def get_new_command(post_data):
     db = app.state.db
-    last_msg_from_me = app.state.db.last_msg_from_me
+    last_msg_from_me = db.last_msg_from_me
     try:
         event = post_data.get('event')
         if event == 'message':

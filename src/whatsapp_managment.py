@@ -89,4 +89,5 @@ if '__main__' == __name__:
     chat_id = '120363370073954360@g.us'
     # print(f"New group created with chat_id: {chat_id}")
     # sleep(2)
+    print(restart_waha_session('http://mother.child_tracker:3000', 'http://handler.child_tracker/mother/get_new_command', ["message.delete"]))
     
