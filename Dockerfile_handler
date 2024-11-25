@@ -17,7 +17,7 @@ WORKDIR /src
 # Copy requirements.txt into the image
 RUN pip install --upgrade pip
 # Install Python dependencies
-RUN pip install -r ~/src/requirements.txt --break-system-packages
+RUN pip install -r requirements.txt --break-system-packages
 
 # Copy the application code
 COPY src/ /src
