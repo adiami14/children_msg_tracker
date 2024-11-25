@@ -59,7 +59,7 @@ def delete_all_messages_from_chat(chat_id :str, domain:str):
     response = requests.delete(f"{domain}/api/default/chats/{chat_id}/messages").json()
     return response
 
-def restart_waha_session(domain:str, web_hook_url: str, events: list, update=False):
+def restart_waha_session(domain:str, web_hook_url: str, events: list):
     data = {
             "webhooks": [
                 {
@@ -68,12 +68,20 @@ def restart_waha_session(domain:str, web_hook_url: str, events: list, update=Fal
                 }
             ]
         }
-    if update:
-        request = requests.put
-    else:
-        request = requests.post
-    response = request(url=f'{domain}/api/sessions/default/restart', json=data)
+    response = requests.post(url=f'{domain}/api/sessions/default/restart', json=data)
     return response
+
+def update_waha_session(domain:str, web_hook_url: str, events: list):
+    data = {
+            "webhooks": [
+                {
+                    "url": web_hook_url,
+                    "events": events
+                }
+            ]
+        }
+    response = requests.put(url=f'{domain}/api/sessions/default', json=data)
+    return response.json()
 
 def create_new_group(group_name: str, domain: str):
     data = {
@@ -93,5 +101,5 @@ if '__main__' == __name__:
     chat_id = '120363370073954360@g.us'
     # print(f"New group created with chat_id: {chat_id}")
     # sleep(2)
-    print(restart_waha_session('http://mother.child_tracker:3000', 'http://handler.child_tracker/mother/get_new_command', ["message.delete"], update=True))
+    print(update_waha_session('http://mother.child_tracker:3000', 'http://handler.child_tracker/mother/get_new_command', ["message.delete"]))
     
