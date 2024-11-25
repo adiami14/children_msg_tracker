@@ -8,6 +8,7 @@ whatsapp:
   mother_url:   'http://192.168.2.10:3000'
   child_phone: '972345345345'
   child_url:    'http://192.168.2.10:5000'
-  notification_group: 'deleted_notifications'
+  notification_group_name: 'deleted_notifications'
+  notification_group_id: '9345638947536456@g.us'
   
   

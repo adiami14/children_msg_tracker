@@ -161,15 +161,15 @@ if __name__ == "__main__":
         time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """
-    db = SQLiteWrapper()
-    db.free_query(data)
-    # db.delete("saved_messages", "msg_id=31")
-    # db.insert("saved_messages", {"chat_id": """Alic,"דגכ,"e""", "msg_id": '30'})
-    data = db.fetch_all("saved_messages")
-    # pprint(data)
-    # db.update("saved_messages", {"msg_id": '31'}, "chat_id = ?", ('Alic,"דגכ,"e',))
+    # db = SQLiteWrapper()
+    # db.free_query(data)
+    # # db.delete("saved_messages", "msg_id=31")
+    # # db.insert("saved_messages", {"chat_id": """Alic,"דגכ,"e""", "msg_id": '30'})
     # data = db.fetch_all("saved_messages")
-    pprint(data)
+    # # pprint(data)
+    # # db.update("saved_messages", {"msg_id": '31'}, "chat_id = ?", ('Alic,"דגכ,"e',))
+    # # data = db.fetch_all("saved_messages")
+    # pprint(data)
     
     config = load_config("/home/adiami/check_for_deleted/config/configuration.yaml")
     pprint(config)

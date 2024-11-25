@@ -47,6 +47,21 @@ async def check_for_deleted_messages(query_param):
         return False
 
 
+@app.post("/mother/get_new_command")
+async def get_new_command(post_data):
+    db = app.state.db
+    try:
+        event = post_data.get('event')
+        if event == 'message':
+            payload = post_data.get('payload')
+            chat_id = payload["from"]
+            msg_id = payload['id']
+            fromMe = payload['fromMe']
+            body = payload['body']
+            hasMedia = payload['hasMedia']
+        if chat_id != db.whatsapp_config['notification_group_id']:
+            return {'status': "not relevant"}
+
 @app.post("/child/save_new_message")
 async def save_new_message(post_data):
     db = app.state.db
@@ -59,9 +74,6 @@ async def save_new_message(post_data):
             fromMe = payload['fromMe']
             body = payload['body']
             hasMedia = payload['hasMedia']
-            if fromMe or chat_id == NOTIFY_GROUP or chat_id == SERGEI_CHAT_ID:
-                logging.info("fromMe")
-                return {"status": "drop", 'data': 'fromMe'}   
             if chat_id == 'status@broadcast':
                 logging.info("broadcast")
                 return {"status": "drop", 'data': 'broadcast'}   
