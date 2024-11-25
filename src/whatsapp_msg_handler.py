@@ -1,7 +1,7 @@
 from pprint import pprint
 from datetime import datetime, timedelta
 import logging, traceback, sys
-from whatsapp_managment import send_whatsapp, contact_basic_info, get_group_info, get_message_info, get_message_by_id, create_new_group
+from whatsapp_managment import send_whatsapp, contact_basic_info, get_group_info, get_message_info, get_message_by_id
 from database import SQLiteWrapper
 NOTIFY_GROUP = '120363344992442907@g.us'
 

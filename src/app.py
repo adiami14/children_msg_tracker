@@ -22,7 +22,7 @@ async def check_for_deleted_messages(query_param):
     table_name = query_param.get('table_name')
     if not table_name:
         logging.error("[check_for_deleted_messages] no parameters")
-        return False
+        return {'status' : False}
     
     messages = db.fetch_all(table_name)
     try:
@@ -41,15 +41,16 @@ async def check_for_deleted_messages(query_param):
                 continue
             if new_msg.is_time_to_delete():
                 new_msg.delete_me()                            
-        return True
+        return {'status' : True}
     except Exception as e:
         logging.error(f"[check_for_deleted_messages] error: {str(e)}\n{traceback.format_exc()}")
-        return False
+        return {'status' : False, 'error' : e}
 
 
 @app.post("/mother/get_new_command")
 async def get_new_command(post_data):
     db = app.state.db
+    last_msg_from_me = app.state.db.last_msg_from_me
     try:
         event = post_data.get('event')
         if event == 'message':
@@ -59,12 +60,25 @@ async def get_new_command(post_data):
             fromMe = payload['fromMe']
             body = payload['body']
             hasMedia = payload['hasMedia']
+        if chat_id == last_msg_from_me:
+            logging.info("msg from bot")
+            return {"status": "drop", 'data': 'bot'}   
         if chat_id != db.whatsapp_config['notification_group_id']:
-            return {'status': "not relevant"}
+            return {"status": "drop", 'data': ''}   
+        
+        logging.info(f"Event: {event}")
+        logging.info(f"chat_id: {chat_id}")
+        logging.info(f"message_id: {msg_id}")
+
+    except Exception as e:
+        logging.error(f"Error processing whatsapp event: {e}\n{traceback.format_exc()}")
+        return {"status": "error", "message": str(e)}
+
 
 @app.post("/child/save_new_message")
 async def save_new_message(post_data):
     db = app.state.db
+    last_msg_from_me = app.state.db.last_msg_from_me
     try:
         event = post_data.get('event')
         if event == 'message':
@@ -74,6 +88,9 @@ async def save_new_message(post_data):
             fromMe = payload['fromMe']
             body = payload['body']
             hasMedia = payload['hasMedia']
+            if chat_id == last_msg_from_me:
+                logging.info("msg from bot")
+                return {"status": "drop", 'data': 'bot'}   
             if chat_id == 'status@broadcast':
                 logging.info("broadcast")
                 return {"status": "drop", 'data': 'broadcast'}   

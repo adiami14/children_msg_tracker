@@ -24,9 +24,9 @@ def send_whatsapp(chat_id: str, msg: str, domain:str):
         )
         response.raise_for_status()
         if response.status_code != 201:
-            return {'status': False, 'data': response.text, 'status_code' : response.status_code}
+            return {'status': False, 'data': response.json(), 'status_code' : response.status_code}
         else:
-            return {'status': True}
+            return {'status': True, 'data': response.json(), 'status_code' : response.status_code}
     except Exception as e:
         error_message = "[send_whatsapp] " + str(e)
         logging.error(error_message)
@@ -85,7 +85,8 @@ def create_new_group(group_name: str, domain: str):
         return response.json()['gid']['_serialized']
 
 if '__main__' == __name__:
-    chat_id = create_new_group("testing testing", 'http://192.168.2.10:5000')
-    print(f"New group created with chat_id: {chat_id}")
-    sleep(2)
-    print(send_whatsapp(chat_id, "new msg testing", 'http://192.168.2.10:5000'))
+    # chat_id = create_new_group("group testing", 'http://192.168.2.10:5000')
+    chat_id = '120363370073954360@g.us'
+    # print(f"New group created with chat_id: {chat_id}")
+    # sleep(2)
+    pprint(check_for_deleted_mesagges('http://192.168.2.10:3000'))
