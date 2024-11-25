@@ -22,6 +22,3 @@ COPY requirements.txt ./
 
 # Copy the application code
 COPY src/ /src
-
-# Default command
-CMD ["/src/web_server/init.sh"]

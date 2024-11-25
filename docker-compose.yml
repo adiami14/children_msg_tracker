@@ -27,7 +27,7 @@ services:
       options:
         max-size: "10m"   
         max-file: "2"     
-  
+    command: "tail -f"
   mother:
     image: devlikeapro/waha:arm
     container_name: mother
