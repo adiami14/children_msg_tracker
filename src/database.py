@@ -172,5 +172,5 @@ if __name__ == "__main__":
     # # data = db.fetch_all("saved_messages")
     # pprint(data)
     
-    config = load_config("/home/adiami/check_for_deleted/config/configuration.yaml")
+    config = load_config("/config/configuration.yaml")
     pprint(config)
