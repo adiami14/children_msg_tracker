@@ -22,14 +22,12 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/log/sergei:/log
     restart: always
-
     logging:
       driver: "json-file"
       options:
         max-size: "10m"   
         max-file: "2"     
     command: "python3 app.py"
-
 
   mother:
     image: devlikeapro/waha
@@ -43,7 +41,7 @@ services:
         ipv4_address: 192.168.2.9
     environment:
       - WHATSAPP_HOOK_URL=http://handler.child_tracker/mother/get_new_command
-      - WHATSAPP_HOOK_EVENTS=message
+      - WHATSAPP_HOOK_EVENTS=message.delete
       - WHATSAPP_START_SESSION=default
       - WHATSAPP_RESTART_ALL_SESSIONS=True
     depends_on:
