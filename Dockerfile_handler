@@ -1,17 +1,27 @@
-# Use Ubuntu as base image
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-ENV TZ=Asia/Jerusalem
-
-RUN apt-get update && apt-get install curl -y \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
     net-tools \
     nano \
-    curl \
     dnsutils \
     iputils-ping \
-    iproute2
-    
-    RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
+    iproute2 \
+    && rm -rf /var/lib/apt/lists/*
 
+# Set the working directory
+WORKDIR /app
+
+# Copy requirements.txt into the image
+COPY requirements.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
+
+# Copy the application code
+COPY src/ /src
+
+# Default command
 CMD ["/src/web_server/init.sh"]
-# CMD ["/bin/bash"]
