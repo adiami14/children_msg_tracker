@@ -89,4 +89,4 @@ if '__main__' == __name__:
     chat_id = '120363370073954360@g.us'
     # print(f"New group created with chat_id: {chat_id}")
     # sleep(2)
-    pprint(check_for_deleted_mesagges('http://192.168.2.10:3000'))
+    

@@ -14,7 +14,7 @@ MOTHER_URL = 'asdasd.asdasd:5000'
 def init_db() -> SQLiteWrapper:
     if not os.path.exists('./data'):
         os.makedirs('./data')
-    return SQLiteWrapper("DATABASE_DIR")
+    return SQLiteWrapper()
 
 @app.get("/child/check_deleted")
 async def check_for_deleted_messages(query_param):
