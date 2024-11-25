@@ -40,7 +40,7 @@ services:
           - mother.child_tracker
         ipv4_address: 192.168.2.9
     environment:
-      - WHATSAPP_HOOK_URL=http://localhost/whatsapp/event
+      - WHATSAPP_HOOK_URL=http://handler.child_tracker/mother/get_new_command
       - WHATSAPP_HOOK_EVENTS=message
       - WHATSAPP_START_SESSION=default
       - WHATSAPP_RESTART_ALL_SESSIONS=True
@@ -64,7 +64,7 @@ services:
           - child.child_tracker
         ipv4_address: 192.168.2.10
     environment:
-      - WHATSAPP_HOOK_URL=http://localhost/child/save_new_message
+      - WHATSAPP_HOOK_URL=http://handler.child_tracker/child/save_new_message
       - WHATSAPP_HOOK_EVENTS=message
       - WHATSAPP_START_SESSION=default
       - WHATSAPP_API_PORT=5000
