@@ -18,6 +18,7 @@ services:
         ipv4_address: 192.168.2.7
     volumes:
       - ./src:/src
+      - ./config:/config
       - /etc/localtime:/etc/localtime:ro
       - /var/log/sergei:/log
     restart: always
