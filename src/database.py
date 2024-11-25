@@ -1,8 +1,10 @@
 import sqlite3
 import logging, yaml, sys
-sys.path.append('/home/adiami/check_for_deleted/')
+# sys.path.append('/home/adiami/check_for_deleted/')
 from typing import Any, Dict, List, Optional
 from pprint import pprint
+
+CONFIG_FILE_PATH = '/config/configuration.yaml'
 
 def load_config(file_path: str):
     with open(file_path, "r") as file:
@@ -14,7 +16,7 @@ class SQLiteWrapper:
         Initialize the SQLiteWrapper instance.
         :param db_path: Path to the SQLite database file.
         """
-        config = load_config("/home/adiami/check_for_deleted/config/configuration.yaml")
+        config = load_config(CONFIG_FILE_PATH)
         self.db_cofig = config['database']
         self.whatsapp_cofig = config['whatsapp']
         self.last_msgs_from_me = []
