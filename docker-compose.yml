@@ -28,7 +28,9 @@ services:
       options:
         max-size: "10m"   
         max-file: "2"     
-    command: "tail -f"
+    command: "python3 app.py"
+
+
   mother:
     image: devlikeapro/waha
     container_name: mother
