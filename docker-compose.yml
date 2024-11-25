@@ -29,7 +29,7 @@ services:
         max-file: "2"     
     command: "tail -f"
   mother:
-    image: devlikeapro/waha:arm
+    image: devlikeapro/waha
     container_name: mother
     ports:
       - '3000:3000/tcp'
@@ -53,7 +53,7 @@ services:
         max-file: "2"     
   
   child:
-    image: devlikeapro/waha:arm
+    image: devlikeapro/waha
     container_name: child
     ports:
       - '5000:5000/tcp'
