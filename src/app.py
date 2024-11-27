@@ -1,10 +1,13 @@
 import os, logging, requests, traceback
 from fastapi import FastAPI, HTTPException, Body
 from typing import Dict, Any
-from whatsapp_msg_handler import whatsappMsg
 from datetime import datetime
-
+from whatsapp_msg_handler import whatsappMsg
 from database import SQLiteWrapper
+from whatsapp_commands import text_to_command
+from whatsapp_managment import send_reaction, send_seen, send_whatsapp
+
+
 
 app = FastAPI()
 DATABASE_DIR = './data/database.db'
@@ -62,14 +65,15 @@ async def check_for_deleted_messages(query_param):
 
 
 @app.post("/mother/get_new_command")
-async def get_new_command(post_data):
+async def get_new_command(post_data: dict = Body(...)):
     db = app.state.db
-    last_msg_from_me = db.last_msg_from_me
+    last_msg_from_me = db.last_msgs_from_me
     try:
         event = post_data.get('event')
         if event == 'message':
             payload = post_data.get('payload')
             chat_id = payload["from"]
+            participant = payload.get('participant')
             msg_id = payload['id']
             fromMe = payload['fromMe']
             body = payload['body']
@@ -84,6 +88,17 @@ async def get_new_command(post_data):
         logging.info(f"chat_id: {chat_id}")
         logging.info(f"message_id: {msg_id}")
 
+        response = text_to_command(body, db)
+        if response:
+            send_seen(chat_id, msg_id, participant)  
+            if response['status']:
+                send_reaction(msg_id)
+            else:
+                send_reaction(msg_id, success=False)
+            
+            logging.info(f"[whatsapp_event] {response}")
+            if response['data']:
+                db.last_msgs_from_me = send_whatsapp(msg=response['data'], phone=response['phone'])
     except Exception as e:
         logging.error(f"Error processing whatsapp event: {e}\n{traceback.format_exc()}")
         return {"status": "error", "message": str(e)}

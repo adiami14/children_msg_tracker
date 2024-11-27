@@ -83,6 +83,31 @@ def start_waha_session(domain:str, web_hook_url: str, events: list):
     response = requests.post(url=f'{domain}/api/sessions/default/start', json=data)
     return response.json()
 
+def send_seen(domian: str,chat_id, message_id, participant):
+    response = requests.post(
+        f"{domain}/api/sendSeen",
+        json={
+            "session": "default",
+            "chatId": chat_id,
+            "messageId": message_id,
+            "participant": participant,
+        },
+    )
+    response.raise_for_status()
+    return response
+
+def send_reaction(domain:str, message_id: str, success=True):
+    if success:
+        reaction = "👍"
+    else:
+        reaction = "👎"
+    response = requests.put(
+        f"{domain}/api/reaction",
+        json={
+            "messageId": message_id,
+            "reaction": reaction,
+            "session": "default"
+        })
 
 def create_new_group(group_name: str, domain: str):
     data = {

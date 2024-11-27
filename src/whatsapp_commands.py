@@ -46,6 +46,7 @@ def is_delete_group_msgs(text:str) -> bool:
 
 def text_to_command(text: str, db: SQLiteWrapper, respelled=False) -> dict:
     response_to_user = {'status' : False, 'play_dead' : False, 'multi': False, 'data': None, 'respelled' : respelled}
+    response_to_user['phone'] = db.whatsapp_config['notification_group_id']
     
     if is_check_for_deleted(text):
         res = check_for_deleted_mesagges(db.whatsapp_cofig['child_url'])

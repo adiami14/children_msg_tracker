@@ -10,6 +10,8 @@ Check list for child_tracker:
     - save_new_message - child phone
     - check_for_deleted_messages - child phone
     - command execution - mother phone
+        - delete chats
+        - scan for deleted
 - *CronTab tasks:*
     - restart mother & child waha sessions
     - check for deleted messages
