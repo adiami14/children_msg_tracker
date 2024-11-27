@@ -97,7 +97,7 @@ def create_new_group(group_name: str, domain: str):
     if response.status_code == 201:
         return response.json()['gid']['_serialized']
 
-def update_waha_session(domain: str, web_hook_url: str, events: list):
+def update_waha_session(domain: str, web_hook_url: str, events):
     data = {
         "webhooks": [
             {
@@ -122,10 +122,7 @@ def get_session_detatils(domain: str):
     try:
         response = requests.get(url=f'{domain}/api/sessions/default')
         response_data = response.json()
-        if response.status_code == 200:
-            pprint(f"Webhook updated successfully: {response_data}")
-        else:
-            print(f"Failed to update webhook: {response.status_code} - {response.text}")
+        
         return response_data
     except requests.RequestException as e:
         print(f"Error during API call: {e}")
@@ -136,8 +133,8 @@ if '__main__' == __name__:
     events = "message.any"
 
     # Update session
-    # session_update = update_waha_session(domain, web_hook_url, events)
-    # pprint(session_update)
-    get_session_detatils(domain)
+    session_update = update_waha_session(domain, web_hook_url, events)
+    pprint(session_update)
+    
 
     
