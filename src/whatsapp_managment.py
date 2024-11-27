@@ -80,7 +80,7 @@ def start_waha_session(domain:str, web_hook_url: str, events: list):
                 }
             ]
         }
-    response = requests.put(url=f'{domain}/api/sessions/default/start', json=data)
+    response = requests.post(url=f'{domain}/api/sessions/default/start', json=data)
     return response.json()
 
 def update_waha_session(domain:str, web_hook_url: str, events: list):
