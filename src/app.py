@@ -27,6 +27,7 @@ def init_db() -> SQLiteWrapper:
     )
     """
     db.free_query(data)
+    logging.info("init_db - file and table created")
     return db
 
 @app.get("/child/check_deleted")

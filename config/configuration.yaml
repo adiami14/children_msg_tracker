@@ -1,6 +1,6 @@
 database:
   saved_messages_table_name: "saved_messages"
-  file_path: "./child_msg_tracker"
+  file_path: "/config/child_tracker.db"
   days_to_save_msg: 2
 
 whatsapp:
