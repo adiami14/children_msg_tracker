@@ -83,17 +83,26 @@ def start_waha_session(domain:str, web_hook_url: str, events: list):
     response = requests.post(url=f'{domain}/api/sessions/default/start', json=data)
     return response.json()
 
-def update_waha_session(domain:str, web_hook_url: str, events: list):
+def update_waha_session(domain: str, web_hook_url: str, events: list):
     data = {
-            "webhooks": [
-                {
-                    "url": web_hook_url,
-                    "events": events
-                }
-            ]
-        }
-    response = requests.put(url=f'{domain}/api/sessions/default', json=data)
-    return response.json()
+        "webhooks": [
+            {
+                "url": web_hook_url,
+                "events": events
+            }
+        ]
+    }
+    try:
+        response = requests.put(url=f'{domain}/api/sessions/default', json=data)
+        response_data = response.json()
+        if response.status_code == 200:
+            print(f"Webhook updated successfully: {response_data}")
+        else:
+            print(f"Failed to update webhook: {response.status_code} - {response.text}")
+        return response_data
+    except requests.RequestException as e:
+        print(f"Error during API call: {e}")
+        return None
 
 def create_new_group(group_name: str, domain: str):
     data = {
@@ -109,9 +118,12 @@ def create_new_group(group_name: str, domain: str):
         return response.json()['gid']['_serialized']
 
 if '__main__' == __name__:
-    # chat_id = create_new_group("group testing", 'http://192.168.2.10:5000')
-    chat_id = '120363370073954360@g.us'
-    # print(f"New group created with chat_id: {chat_id}")
-    # sleep(2)
-    print(update_waha_session('http://child.child_tracker:5000', 'http://handler.child_tracker/child/save_new_message', ["message.any"]))
+    domain = 'http://child.child_tracker:5000'
+    web_hook_url = 'http://handler.child_tracker/child/save_new_message'
+    events = ["message.any"]
+
+    # Update session
+    session_update = update_waha_session(domain, web_hook_url, events)
+    pprint(session_update)
+
     
