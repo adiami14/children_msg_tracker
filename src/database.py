@@ -20,6 +20,7 @@ class SQLiteWrapper:
         self.db_cofig = config['database']
         self.whatsapp_cofig = config['whatsapp']
         self.last_msgs_from_me = []
+        
     def _connect(self) -> sqlite3.Connection:
         """
         Establish a connection to the SQLite database.
