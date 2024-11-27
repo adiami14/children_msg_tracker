@@ -1,5 +1,5 @@
 import os, logging, requests, traceback
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body
 from typing import Dict, Any
 from whatsapp_msg_handler import whatsappMsg
 from datetime import datetime
@@ -75,8 +75,9 @@ async def get_new_command(post_data):
         return {"status": "error", "message": str(e)}
 
 
+
 @app.post("/child/save_new_message")
-async def save_new_message(post_data):
+async def save_new_message(post_data: dict = Body(...)):
     db = app.state.db
     last_msg_from_me = app.state.db.last_msg_from_me
     try:
@@ -108,10 +109,3 @@ async def save_new_message(post_data):
         logging.error(f"Error processing whatsapp event: {e}\n{traceback.format_exc()}")
         return {"status": "error", "message": str(e)}
 
-
-
-
-if __name__ == "__main__":
-    import uvicorn
-    app.state.db = init_db()
-    uvicorn.run(app, host="0.0.0.0", port=80)
