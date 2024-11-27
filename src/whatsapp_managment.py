@@ -71,6 +71,18 @@ def restart_waha_session(domain:str, web_hook_url: str, events: list):
     response = requests.post(url=f'{domain}/api/sessions/default/restart', json=data)
     return response
 
+def start_waha_session(domain:str, web_hook_url: str, events: list):
+    data = {
+            "webhooks": [
+                {
+                    "url": web_hook_url,
+                    "events": events
+                }
+            ]
+        }
+    response = requests.put(url=f'{domain}/api/sessions/default/start', json=data)
+    return response.json()
+
 def update_waha_session(domain:str, web_hook_url: str, events: list):
     data = {
             "webhooks": [
@@ -80,7 +92,7 @@ def update_waha_session(domain:str, web_hook_url: str, events: list):
                 }
             ]
         }
-    response = requests.put(url=f'{domain}/api/sessions/default', json=data)
+    response = requests.post(url=f'{domain}/api/sessions/default', json=data)
     return response.json()
 
 def create_new_group(group_name: str, domain: str):

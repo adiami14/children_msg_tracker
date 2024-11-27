@@ -40,8 +40,8 @@ services:
           - mother.child_tracker
         ipv4_address: 192.168.2.9
     environment:
-      - WHATSAPP_HOOK_URL=http://handler.child_tracker/mother/get_new_command
-      - WHATSAPP_HOOK_EVENTS=message.delete
+      # - WHATSAPP_HOOK_URL=http://handler.child_tracker/mother/get_new_command
+      # - WHATSAPP_HOOK_EVENTS=message.delete
       - WHATSAPP_START_SESSION=default
       - WHATSAPP_RESTART_ALL_SESSIONS=True
     depends_on:
