@@ -79,7 +79,7 @@ async def get_new_command(post_data):
 @app.post("/child/save_new_message")
 async def save_new_message(post_data: dict = Body(...)):
     db = app.state.db
-    last_msg_from_me = app.state.db.last_msg_from_me
+    last_msg_from_me = app.state.db.last_msgs_from_me
     try:
         event = post_data.get('event')
         if event == 'message':
