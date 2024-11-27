@@ -14,7 +14,20 @@ MOTHER_URL = 'asdasd.asdasd:5000'
 def init_db() -> SQLiteWrapper:
     if not os.path.exists('./data'):
         os.makedirs('./data')
-    return SQLiteWrapper()
+    db = SQLiteWrapper()
+    data = """
+    CREATE TABLE IF NOT EXISTS saved_messages (
+        chat_id VARCHAR(255),
+        msg_id VARCHAR(255),
+        body TEXT,
+        is_group tinyint(1),
+        group_name VARCHAR(255),
+        user_name VARCHAR(255),
+        time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """
+    db.free_query(data)
+    return db
 
 @app.get("/child/check_deleted")
 async def check_for_deleted_messages(query_param):
