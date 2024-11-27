@@ -58,7 +58,7 @@ class whatsappMsg(object):
 
         query = f"""
             INSERT INTO saved_messages (chat_id, msg_id, body, is_group, user_name, group_name) 
-            VALUES ('{self.chat_id}', '{self.msg_id}', '{safe_body}', '{is_group}', '{safe_user_name}', '{safe_group_name}')
+            VALUES ('{self.chat_id}', '{self.msg_id}', '{safe_body}', '{is_group}', '{self.user_name}', '{self.group_name}')
         """
 
         return self.db.free_query(query)
