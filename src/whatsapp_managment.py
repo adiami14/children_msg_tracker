@@ -92,7 +92,7 @@ def update_waha_session(domain:str, web_hook_url: str, events: list):
                 }
             ]
         }
-    response = requests.post(url=f'{domain}/api/sessions/default', json=data)
+    response = requests.put(url=f'{domain}/api/sessions/default', json=data)
     return response.json()
 
 def create_new_group(group_name: str, domain: str):
@@ -113,5 +113,5 @@ if '__main__' == __name__:
     chat_id = '120363370073954360@g.us'
     # print(f"New group created with chat_id: {chat_id}")
     # sleep(2)
-    print(start_waha_session('http://child.child_tracker:5000', 'http://handler.child_tracker/child/save_new_message', ["message.any", "message.delete"]))
+    print(update_waha_session('http://child.child_tracker:5000', 'http://handler.child_tracker/child/save_new_message', ["message.any", "message.delete"]))
     
