@@ -83,6 +83,20 @@ def start_waha_session(domain:str, web_hook_url: str, events: list):
     response = requests.post(url=f'{domain}/api/sessions/default/start', json=data)
     return response.json()
 
+
+def create_new_group(group_name: str, domain: str):
+    data = {
+        "name": group_name,
+        "participants": [
+            {
+            "id": "972549747174@c.us"
+            }
+        ]
+        }
+    response = requests.post(url=f'{domain}/api/default/groups', json=data)
+    if response.status_code == 201:
+        return response.json()['gid']['_serialized']
+
 def update_waha_session(domain: str, web_hook_url: str, events: list):
     data = {
         "webhooks": [
@@ -103,27 +117,27 @@ def update_waha_session(domain: str, web_hook_url: str, events: list):
     except requests.RequestException as e:
         print(f"Error during API call: {e}")
         return None
-
-def create_new_group(group_name: str, domain: str):
-    data = {
-        "name": group_name,
-        "participants": [
-            {
-            "id": "972549747174@c.us"
-            }
-        ]
-        }
-    response = requests.post(url=f'{domain}/api/default/groups', json=data)
-    if response.status_code == 201:
-        return response.json()['gid']['_serialized']
-
+    
+def get_session_detatils(domain: str):
+    try:
+        response = requests.get(url=f'{domain}/api/sessions/default')
+        response_data = response.json()
+        if response.status_code == 200:
+            pprint(f"Webhook updated successfully: {response_data}")
+        else:
+            print(f"Failed to update webhook: {response.status_code} - {response.text}")
+        return response_data
+    except requests.RequestException as e:
+        print(f"Error during API call: {e}")
+        return None
 if '__main__' == __name__:
     domain = 'http://child.child_tracker:5000'
     web_hook_url = 'http://handler.child_tracker/child/save_new_message'
-    events = ["message.any"]
+    events = "message.any"
 
     # Update session
-    session_update = update_waha_session(domain, web_hook_url, events)
-    pprint(session_update)
+    # session_update = update_waha_session(domain, web_hook_url, events)
+    # pprint(session_update)
+    get_session_detatils(domain)
 
     
