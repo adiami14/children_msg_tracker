@@ -51,8 +51,10 @@ class whatsappMsg(object):
             self.body = "Empty message"
         if self.hasMedia:
             self.body += " and Contained Media (which is probably already deleted)"
-        safe_user_name = self.user_name.replace("\\", "\\\\").replace("'", "\\'")
-        safe_group_name = self.group_name.replace("\\", "\\\\").replace("'", "\\'")
+        if self.user_name:
+            self.user_name = self.user_name.replace("\\", "\\\\").replace("'", "\\'")
+        if self.group_name:
+            self.group_name = self.group_name.replace("\\", "\\\\").replace("'", "\\'")
 
         query = f"""
             INSERT INTO saved_messages (chat_id, msg_id, body, is_group, user_name, group_name) 
