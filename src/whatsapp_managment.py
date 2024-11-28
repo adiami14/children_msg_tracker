@@ -172,10 +172,10 @@ def get_session_detatils(domain: str):
 if '__main__' == __name__:
     domain = 'http://child.child_tracker:5000'
     web_hook_url = 'http://handler.child_tracker/child/save_new_message'
-    events = "message.any"
+    events = ["message.any"]
 
     # Update session
-    session_update = update_waha_session(domain, web_hook_url, events)
+    session_update = start_waha_session(domain, web_hook_url, events)
     pprint(session_update)
     
 
