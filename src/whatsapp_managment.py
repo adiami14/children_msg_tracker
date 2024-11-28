@@ -1,5 +1,5 @@
 import logging.config
-import requests, logging, yaml
+import requests, logging, yaml, sys
 from pprint import pprint
 from time import sleep
 
@@ -203,9 +203,14 @@ if '__main__' == __name__:
     domain = 'http://child.child_tracker:5000'
     web_hook_url = 'http://handler.child_tracker/child/save_new_message'
     events = ["message.any"]
-
+    param = sys.argv[1]
+    if param == 1:
     # Update session
-    session_update = start_waha_session(domain, web_hook_url, events)
+        session_update = start_waha_session(domain, web_hook_url, events)
+    elif param == 2:
+        session_update = update_waha_session(domain, web_hook_url, events)
+    elif param == 3:
+        session_update = get_session_detatils(domain)
     pprint(session_update)
     
 
