@@ -66,9 +66,9 @@ services:
     environment:
       # - WHATSAPP_HOOK_URL=http://handler.child_tracker/child/save_new_message
       # - WHATSAPP_HOOK_EVENTS=message
-      - WHATSAPP_START_SESSION=default
+      # - WHATSAPP_START_SESSION=default
       - WHATSAPP_API_PORT=5000
-      - WHATSAPP_RESTART_ALL_SESSIONS=True
+      # - WHATSAPP_RESTART_ALL_SESSIONS=True
     depends_on:
       - handler
     logging:
