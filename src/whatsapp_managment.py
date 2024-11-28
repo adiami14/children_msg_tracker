@@ -155,7 +155,7 @@ def start_default_session():
         "config": {
             "webhooks": [
                 {
-                    "url": "http://handler.child_tracker/child/save_new_message",
+                    "url": "http://handler.child_tracker/child/save_new_message",  # Ensure this URL is valid
                     "events": ["message.any"]  # Event type
                 }
             ]
@@ -167,7 +167,6 @@ def start_default_session():
     
     # Sending the POST request
     response = requests.post(url, json=data)
-    
     return response
     
 def get_session_detatils(domain: str):
