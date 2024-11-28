@@ -175,7 +175,7 @@ if '__main__' == __name__:
     events = ["message.any"]
 
     # Update session
-    session_update = start_waha_session(domain, web_hook_url, events)
+    session_update = update_waha_session(domain, web_hook_url, events)
     pprint(session_update)
     
 
