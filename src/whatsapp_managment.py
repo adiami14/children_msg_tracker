@@ -142,6 +142,23 @@ def update_waha_session(domain: str, web_hook_url: str, events):
     except requests.RequestException as e:
         print(f"Error during API call: {e}")
         return None
+
+def start_waha_session(domain: str, web_hook_url: str, events):
+    data = {
+        "webhooks": [
+            {
+                "url": web_hook_url,
+                "events": events
+            }
+        ]
+    }
+    try:
+        response = requests.post(url=f'{domain}/api/sessions/default/start', json=data)
+        response_data = response.json()
+        return response_data
+    except requests.RequestException as e:
+        print(f"Error during API call: {e}")
+        return None
     
 def get_session_detatils(domain: str):
     try:
