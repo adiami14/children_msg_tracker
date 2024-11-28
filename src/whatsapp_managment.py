@@ -1,3 +1,4 @@
+import logging.config
 import requests, logging, yaml
 from pprint import pprint
 from time import sleep
@@ -143,22 +144,31 @@ def update_waha_session(domain: str, web_hook_url: str, events):
         print(f"Error during API call: {e}")
         return None
 
-def start_waha_session(domain: str, web_hook_url: str, events):
+def start_default_session():
+    # WAHA server URL
+    waha_url = "http://child.child_tracker:5000"
+    
+    # Session configuration data
     data = {
-        "webhooks": [
-            {
-                "url": web_hook_url,
-                "events": events
-            }
-        ]
+        "name": "default",  # Default session name
+        "start": True,  # Start the session immediately
+        "config": {
+            "webhooks": [
+                {
+                    "url": "http://handler.child_tracker/child/save_new_message",
+                    "events": ["message.any"]  # Event type
+                }
+            ]
+        }
     }
-    try:
-        response = requests.post(url=f'{domain}/api/sessions/default/start', json=data)
-        response_data = response.json()
-        return response_data
-    except requests.RequestException as e:
-        print(f"Error during API call: {e}")
-        return None
+    
+    # API endpoint to create and start a session
+    url = f"{waha_url}/api/sessions"
+    
+    # Sending the POST request
+    response = requests.post(url, json=data)
+    
+    return response
     
 def get_session_detatils(domain: str):
     try:
@@ -175,8 +185,9 @@ if '__main__' == __name__:
     events = ["message.any"]
 
     # Update session
-    session_update = update_waha_session(domain, web_hook_url, events)
-    pprint(session_update)
+    response = start_default_session()
+    print(f"Status Code: {response.status_code}")
+    print(f"Response: {response.text}")
     
 
     
