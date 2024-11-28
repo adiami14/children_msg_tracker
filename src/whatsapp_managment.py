@@ -205,7 +205,6 @@ if '__main__' == __name__:
     events = ["message.any"]
 
     # Update session
-    logging.config()
     session_update = start_waha_session(domain, web_hook_url, events)
     pprint(session_update)
     
